@@ -52,14 +52,14 @@
     <div class="container mt-5">
         <div class="row">
 
-            @if ( request()->route()->getName() !== 'newTemplate' &&
+            {{--@if ( request()->route()->getName() !== 'newTemplate' &&
                   request()->route()->getName() !== 'editMailable' &&
                   request()->route()->getName() !== 'viewTemplate'
                 )
 
                 @include('maileclipse::layout.sidebar')
 
-            @endif
+            @endif--}}
 
             @yield('content')
 
