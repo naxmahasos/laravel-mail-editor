@@ -690,9 +690,16 @@ class MailEclipse
 
         $data = new ReflectionClass($mailable);
 
-        foreach ($data->getTraits() as $trait) {
-            foreach ($trait->getProperties(ReflectionProperty::IS_PUBLIC) as $traitProperty) {
-                $traitProperties[] = $traitProperty->name;
+        $invalidTraits = [
+            'Illuminate\Bus\Queueable',
+            'Illuminate\Queue\SerializesModels'
+        ];
+
+        foreach ($data->getTraits() as $traitName => $trait) {
+            if(!in_array($traitName, $invalidTraits)) {
+                foreach ($trait->getProperties(ReflectionProperty::IS_PUBLIC) as $traitProperty) {
+                    $traitProperties[] = $traitProperty->name;
+                }
             }
         }
 
