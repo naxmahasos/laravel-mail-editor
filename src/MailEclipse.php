@@ -687,7 +687,7 @@ class MailEclipse
     private static function getMailableViewData($mailable, $mailable_data)
     {
         $traitProperties = [];
-
+        $invalidTraitProps = [];
         $data = new ReflectionClass($mailable);
 
         $invalidTraits = [
@@ -700,6 +700,10 @@ class MailEclipse
                 foreach ($trait->getProperties(ReflectionProperty::IS_PUBLIC) as $traitProperty) {
                     $traitProperties[] = $traitProperty->name;
                 }
+            } else {
+                foreach ($trait->getProperties(ReflectionProperty::IS_PUBLIC) as $traitProperty) {
+                    $invalidTraitProps[] = $traitProperty->name;
+                }
             }
         }
 
@@ -708,7 +712,7 @@ class MailEclipse
 
         foreach ($properties as $prop) {
             if ($prop->class == $data->getName() || $prop->class == get_parent_class($data->getName()) &&
-                    get_parent_class($data->getName()) != 'Illuminate\Mail\Mailable' && ! $prop->isStatic()) {
+                get_parent_class($data->getName()) != 'Illuminate\Mail\Mailable' && ! $prop->isStatic()) {
                 $allProps[] = $prop->name;
             }
         }
@@ -721,11 +725,13 @@ class MailEclipse
             return collect($obj);
         }
 
+        $allProps = array_diff($allProps, $invalidTraitProps);
+
         $classProps = array_diff($allProps, $traitProperties);
 
-        $withFuncData = collect($obj->buildViewData())->keys();
+        $withFuncData = array_diff(array_keys($obj->buildViewData()), $invalidTraitProps);
 
-        $mailableData = collect($classProps)->merge($withFuncData);
+        $mailableData = collect($classProps)->merge(collect($withFuncData));
 
         $data = $mailableData->map(function ($parameter) use ($mailable_data) {
             return [

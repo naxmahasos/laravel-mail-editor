@@ -25,7 +25,7 @@
     <!-- Axios Library -->
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     @if ( request()->route()->getName() === 'newTemplate' ||
-          request()->route()->getName() === 'editMailable' || 
+          request()->route()->getName() === 'editMailable' ||
           request()->route()->getName() === 'viewTemplate')
 <!-- Editor Markdown/Html/Text -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
@@ -47,12 +47,12 @@
 
 <body>
 
-    @include('maileclipse::layout.header')
-        
+    {{--@include('maileclipse::layout.header')--}}
+
     <div class="container mt-5">
         <div class="row">
 
-            @if ( request()->route()->getName() !== 'newTemplate' && 
+            @if ( request()->route()->getName() !== 'newTemplate' &&
                   request()->route()->getName() !== 'editMailable' &&
                   request()->route()->getName() !== 'viewTemplate'
                 )
@@ -62,10 +62,10 @@
             @endif
 
             @yield('content')
-            
+
 
         </div>
-        @include('maileclipse::layout.footer')
+        {{--@include('maileclipse::layout.footer')--}}
     </div>
 
 </body>
