@@ -50,6 +50,34 @@ class MailablesController extends Controller
         return view(MailEclipse::VIEW_NAMESPACE.'::sections.view-mailable')->with(compact('resource'));
     }
 
+    public function updateViewMailable($name)
+    {
+        $mailable = MailEclipse::getMailable('name', $name);
+
+        if ($mailable->isEmpty()) {
+            return redirect()->route('mailableList');
+        }
+
+        $resource = $mailable->first();
+
+        return view(MailEclipse::VIEW_NAMESPACE.'::sections.update-mailable')->with(compact('resource'));
+    }
+
+    public function updateMailable($name, Request $request)
+    {
+        $mailable = MailEclipse::getMailable('name', $name);
+
+        if ($mailable->isEmpty()) {
+            return redirect()->route('mailableList');
+        }
+
+        $resource = $mailable->first();
+
+        MailEclipse::updateMailable($resource, $request);
+
+        return redirect()->route('viewMailable', ['name' => $name]);
+    }
+
     public function editMailable($name)
     {
         $templateData = MailEclipse::getMailableTemplateData($name);

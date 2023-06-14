@@ -1146,4 +1146,32 @@ class MailEclipse
 
         return $mailableInstance;
     }
+
+    private static function replaceText($file, $string, $replaceText)
+    {
+        $lengthOfString = strlen($string) + 1;
+        $stringStartPos = strpos($file, $string);
+        if($stringStartPos > 0) {
+            $offset         = $stringStartPos + $lengthOfString;
+            $stringEndPos   = strpos($file, "',", $offset);
+            $length         = $stringEndPos - $stringStartPos - $lengthOfString;
+
+            return substr_replace($file, $replaceText, $offset, $length);
+        }
+
+        return $file;
+    }
+
+    public static function updateMailable($resourse, $request = null)
+    {
+        $mailableDir = config('maileclipse.mailables_dir');
+        $filePath = $mailableDir . $resourse['name'] . '.php';
+
+        $file = file_get_contents($filePath);
+
+        $replacedFile   = self::replaceText($file, 'subject: ', $request->subject);
+        $replacedFile   = self::replaceText($replacedFile, 'view: ', $request->view);
+
+        file_put_contents($filePath, $replacedFile);
+    }
 }

@@ -24,6 +24,7 @@ use Qoraiche\MailEclipse\MailEclipse as MailEclipseParent;
  * @method static \Illuminate\Contracts\Mail\Mailable|\Illuminate\Contracts\Support\Renderable buildMailable($instance, $type = 'call')
  * @method static void|string renderPreview($simpleview, $view, $template = false, $instance = null)
  * @method static void sendTest(string $name, string $recipient)
+ * @method static updateMailable($resourse, $request = null)
  *
  * @see \Qoraiche\MailEclipse\MailEclipse
  */
